@@ -42,15 +42,17 @@ def _has_system_first(messages: list[Any]) -> bool:
 
 
 async def chatbot(state: MessagesState, runtime: Runtime[Context]) -> Dict[str, Any]:
-    # Lee desde assistant context (LangSmith) o usa fallback
-    system_prompt = (runtime.context or {}).get(
-        "system_prompt",
-        "Sos un asistente. Si necesitás info actual, usá la herramienta de búsqueda.",
+    ctx = runtime.context or {}
+    cfg = getattr(runtime, "configurable", None) or {}
+
+    system_prompt = (
+        ctx.get("system_prompt")
+        or cfg.get("system_prompt")
+        or "Sos un asistente. Si necesitás info actual, usá la herramienta de búsqueda."
     )
 
     messages = state["messages"]
     if not _has_system_first(messages):
-        # Agregamos SystemMessage en formato LangChain (más robusto)
         messages = [SystemMessage(content=system_prompt)] + messages
 
     resp = await llm_with_tools.ainvoke(messages)
