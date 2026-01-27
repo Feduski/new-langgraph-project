@@ -40,10 +40,10 @@ class OrchestratorState(MessagesState):
 # LLMs
 # -------------------------
 # Orchestrator LLM (final assembly)
-orch_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+orch_llm = ChatOpenAI(model="gpt-5-mini", temperature=0)
 
 # Tool-less subagents (no tools bound)
-sub_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+sub_llm = ChatOpenAI(model="gpt-5-mini", temperature=0)
 
 # Tavily (explicit calls; not via tool-calling)
 tavily = TavilySearch(max_results=20)
